@@ -1,6 +1,11 @@
 import './App.css';
 import search_Img from './images/search.png';
 import mist from './images/mist.png';
+import clear from './images/clear.png';
+import clouds from './images/clouds.png';
+import drizzle from './images/drizzle.png';
+import snow from './images/snow.png';
+import rain from './images/rain.png';
 import humidity from './images/humidity.png';
 import wind from './images/wind.png';
 import { useEffect, useState } from 'react';
@@ -8,6 +13,8 @@ function App(){
   const [city, setCity] = useState("")
   const [weatherInfo, setWeatherInfo] = useState(null)
   const [error, setError] = useState(false)
+  const [weatherIcon, setweatherIcon] = useState("")
+
 
   const apiKey = "0c42f7f6b53b244c78a418f4f181282a";
   const apiUrl = "https://api.openweathermap.org./data/2.5/weather?&q=";
@@ -28,6 +35,32 @@ function App(){
     }
   }, [city])
 
+  useEffect(()=>{
+    if(weatherInfo){
+      if(weatherInfo.weather[0].main === "Clouds"){
+        setweatherIcon(clouds) 
+    }
+    else if(weatherInfo.weather[0].main === "Clear"){
+        setweatherIcon(clear)
+    }
+    else if(weatherInfo.weather[0].main === "Rain"){
+        setweatherIcon(rain)
+    }
+    else if(weatherInfo.weather[0].main === "Drizzle"){
+        setweatherIcon(drizzle)
+    }
+    else if(weatherInfo.weather[0].main === "Mist"){
+        setweatherIcon(mist)
+    } else if(weatherInfo.weather[0].main === "Snow"){
+      setweatherIcon(snow)
+    }
+    else{
+      setweatherIcon("")
+    }
+  }
+  }, [weatherInfo])
+
+
   return(
     <div className="card">
         <div className="search">
@@ -44,7 +77,7 @@ function App(){
         {weatherInfo && !error &&(
           <>
           <div className="weather">
-            <img src={mist} className="weather_icon" width="130" alt=''/>
+            <img src={weatherIcon} className="weather_icon" width="130" alt=''/>
             <h1 className="temp">{weatherInfo.main.temp} °C</h1>
             <h2 className="city">{weatherInfo.name}</h2>
           </div>
